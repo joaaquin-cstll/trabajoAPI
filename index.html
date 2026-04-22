@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Springfield Wiki</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <h1>Habitantes de Springfield</h1>
+        <div class="controles">
+            <button class="btn-categoria" onclick="cargarCategoria('protagonistas')">Protagonistas</button>
+            <button class="btn-categoria" onclick="cargarCategoria('iconicos')">Icónicos</button>
+            <button class="btn-categoria" onclick="cargarCategoria('secundarios')">Secundarios</button>
+            <button class="btn-categoria" onclick="cargarLugares()">📍 Lugares</button>
+</div>
+        <p id="estadoMensaje">Elige una categoría para explorar</p>
+    </header>
+
+    <main id="contenedorPersonajes">
+        </main>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,59 +1,76 @@
-const API_KEY = '4156caece0a24da8bbfdfa9de29c6c35'; // Pon tu clave aquí
-const BASE_URL = 'https://api.football-data.org/v4';
+// Asegúrate de que la URL base NO termine en barra /
+const BASE_URL = "https://thesimpsonsapi.com"; 
+const URL_PERSONAJES = `${BASE_URL}/api/characters`;
+const URL_LUGARES = `${BASE_URL}/api/locations`;
 
-async function obtenerDatosLiga() {
-    const headers = { 'X-Auth-Token': API_KEY };
+async function cargarCategoria(categoria) {
+    const contenedor = document.getElementById('contenedorPersonajes');
+    const estado = document.getElementById('estadoMensaje');
+    contenedor.innerHTML = "<p>Buscando en Springfield...</p>";
 
     try {
-        console.log("⚽ Conectando con el túnel de vestuarios... \n");
+        const respuesta = await fetch(URL_PERSONAJES);
+        const datos = await respuesta.json();
+        const personajes = datos.results;
 
-        // 1. Obtenemos la clasificación actual para saber quién llega fuerte
-        const resClasificacion = await fetch(`${BASE_URL}/competitions/PD/standings`, { headers });
-        const dataClasificacion = await resClasificacion.json();
-        
-        // 2. Obtenemos los próximos partidos (Próximos 5)
-        const resPartidos = await fetch(`${BASE_URL}/competitions/PD/matches?status=SCHEDULED`, { headers });
-        const dataPartidos = await resPartidos.json();
-
-        if (!dataPartidos.matches || dataPartidos.matches.length === 0) {
-            console.log("¡No hay partidos programados pronto! Toca descansar.");
-            return;
+        let filtrados = [];
+        if (categoria === 'protagonistas') {
+            filtrados = personajes.filter(p => p.id <= 5);
+        } else if (categoria === 'iconicos') {
+            const idsIconicos = [9, 13, 15, 16, 17, 18];
+            filtrados = personajes.filter(p => idsIconicos.includes(p.id));
+        } else {
+            const excluidos = [1, 2, 3, 4, 5, 9, 13, 15, 16, 17, 18];
+            filtrados = personajes.filter(p => !excluidos.includes(p.id));
         }
 
-        procesarPredicciones(dataClasificacion.standings[0].table, dataPartidos.matches.slice(0, 5));
-
-    } catch (error) {
-        console.error("❌ Error en el VAR:", error.message);
+        renderizar(filtrados, 'personaje');
+        estado.innerText = `Mostrando personajes: ${categoria}`;
+    } catch (e) {
+        estado.innerText = "Error al conectar con la API.";
     }
 }
 
-function procesarPredicciones(clasificacion, proximosPartidos) {
-    console.log("--- 🔮 PREDICCIONES DE LA JORNADA 🔮 ---");
+async function cargarLugares() {
+    const contenedor = document.getElementById('contenedorPersonajes');
+    const estado = document.getElementById('estadoMensaje');
+    contenedor.innerHTML = "<p>Viajando por Springfield...</p>";
 
-    proximosPartidos.forEach(partido => {
-        const local = partido.homeTeam.name;
-        const visitante = partido.awayTeam.name;
+    try {
+        const respuesta = await fetch(URL_LUGARES);
+        const datos = await respuesta.json();
+        const lugaresIconicos = datos.results.slice(0, 10);
 
-        // Buscamos la posición de cada uno en la tabla
-        const posLocal = clasificacion.find(t => t.team.id === partido.homeTeam.id).position;
-        const posVisitante = clasificacion.find(t => t.team.id === partido.awayTeam.id).position;
-
-        let comentario = "";
-        if (posLocal < posVisitante) {
-            comentario = `Favorecido el ${local} por su posición en la tabla (${posLocal}º).`;
-        } else if (posVisitante < posLocal) {
-            comentario = `¡Ojo! El ${visitante} (${posVisitante}º) viene mejor que el local.`;
-        } else {
-            comentario = "Duelo de titanes igualados. ¡Cualquiera puede ganar!";
-        }
-
-        console.log(`
-🏟️  ${local} vs ${visitante}
-📈  Ranking: ${posLocal}º vs ${posVisitante}º
-💡  Predicción: ${comentario}
----------------------------------------`);
-    });
+        renderizar(lugaresIconicos, 'lugar');
+        estado.innerText = "📍 Lugares emblemáticos";
+    } catch (e) {
+        estado.innerText = "Error al conectar con la API.";
+    }
 }
 
-// Arrancamos el proyecto
-obtenerDatosLiga();
+function renderizar(lista, tipo) {
+    const contenedor = document.getElementById('contenedorPersonajes');
+    contenedor.innerHTML = "";
+
+    lista.forEach(item => {
+        const tarjeta = document.createElement('div');
+        tarjeta.className = 'tarjeta';
+        
+        // CORRECCIÓN CLAVE: Unimos la BASE_URL con la ruta de la imagen
+        // p.portrait_path o p.image_path ya traen la barra inicial "/"
+        const rutaRelativa = tipo === 'lugar' ? item.image_path : item.portrait_path;
+        const urlCompletaImagen = `${BASE_URL}${rutaRelativa}`;
+
+        tarjeta.innerHTML = `
+            <div class="imagen-contenedor">
+                <img src="${urlCompletaImagen}" alt="${item.name}" loading="lazy" 
+                     onerror="this.onerror=null; this.src='https://placehold.co/200x200/3c5baf/ffffff?text=Springfield'">
+            </div>
+            <div class="nombre">${item.name}</div>
+            <div class="ocupacion">${tipo === 'lugar' ? 'Uso: ' + item.use : item.occupation}</div>
+            ${tipo === 'personaje' && item.phrases && item.phrases.length > 0 ? `<p class="frase">"${item.phrases[0]}"</p>` : ''}
+            ${tipo === 'lugar' ? `<p class="ciudad">🏙️ ${item.town || 'Springfield'}</p>` : ''}
+        `;
+        contenedor.appendChild(tarjeta);
+    });
+}
