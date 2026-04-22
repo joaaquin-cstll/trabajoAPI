@@ -56,15 +56,18 @@ function renderizar(lista, tipo) {
         const tarjeta = document.createElement('div');
         tarjeta.className = 'tarjeta';
         
-        // CORRECCIÓN CLAVE: Unimos la BASE_URL con la ruta de la imagen
-        // p.portrait_path o p.image_path ya traen la barra inicial "/"
+        // 1. Construimos la URL original de la API
         const rutaRelativa = tipo === 'lugar' ? item.image_path : item.portrait_path;
-        const urlCompletaImagen = `${BASE_URL}${rutaRelativa}`;
+        const urlOriginal = `${BASE_URL}${rutaRelativa}`;
+
+        // 2. LA SOLUCIÓN: Usamos un proxy de imágenes gratuito (wsrv.nl)
+        // Esto descarga la imagen por ti y te la sirve sin bloqueos de CORS/Hotlinking
+        const urlConProxy = `https://wsrv.nl/?url=${encodeURIComponent(urlOriginal)}`;
 
         tarjeta.innerHTML = `
             <div class="imagen-contenedor">
-                <img src="${urlCompletaImagen}" alt="${item.name}" loading="lazy" 
-                     onerror="this.onerror=null; this.src='https://placehold.co/200x200/3c5baf/ffffff?text=Springfield'">
+                <img src="${urlConProxy}" alt="${item.name}" 
+                     onerror="this.src='https://placehold.co/200x200/3c5baf/ffffff?text=Springfield'">
             </div>
             <div class="nombre">${item.name}</div>
             <div class="ocupacion">${tipo === 'lugar' ? 'Uso: ' + item.use : item.occupation}</div>
