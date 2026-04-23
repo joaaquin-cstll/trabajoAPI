@@ -1,112 +1,120 @@
-body {
-    font-family: 'Arial', sans-serif;
-    background: #fed41d;
-    margin: 0;
-    text-align: center;
+:root {
+    --disney-blue: #006e99;
+    --disney-dark: #002d40;
+    --gold: #f9d71c;
+    --light-bg: #f0f4f8;
+    --success: #27ae60;
+    --error: #e74c3c;
 }
 
-header {
-    background: #3c5baf;
-    padding: 25px;
-    color: white;
-    border-bottom: 5px solid #000;
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
+
+body { background: var(--light-bg); color: #333; line-height: 1.6; }
+
+/* Navbar */
+.navbar {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1rem 8%; background: var(--disney-dark); color: white;
+    position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+.logo { font-weight: 800; font-size: 1.5rem; }
+.logo span { color: var(--gold); }
+.nav-links button {
+    background: none; border: none; color: white; cursor: pointer;
+    font-size: 1rem; padding: 10px 15px; font-weight: 600; transition: 0.3s;
+}
+.nav-links button.active { color: var(--gold); border-bottom: 2px solid var(--gold); }
+
+/* Main Content */
+main { padding: 40px 8%; }
+.header { text-align: center; margin-bottom: 40px; }
+.header h1 { font-size: 2.5rem; color: var(--disney-blue); margin-bottom: 10px; }
+
+#search {
+    width: 100%; max-width: 500px; padding: 15px 25px; border-radius: 30px;
+    border: 2px solid #ddd; outline: none; font-size: 1rem; margin-top: 15px;
 }
 
-.controles {
-    margin-top: 15px;
-    display: flex;
-    justify-content: center;
-    gap: 15px;
+/* Grid de Personajes */
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 25px; }
+.card {
+    background: white; border-radius: 20px; padding: 20px; text-align: center;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.05); transition: 0.3s;
+}
+.card:hover { transform: translateY(-5px); }
+.card img { width: 100%; height: 180px; object-fit: contain; border-radius: 10px; margin-bottom: 10px; }
+.card h3 { font-size: 1rem; color: var(--disney-dark); }
+
+/* Estilos del Juego */
+.game-card {
+    background: white; max-width: 550px; margin: 0 auto; padding: 40px;
+    border-radius: 30px; text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+}
+.img-container {
+    width: 250px; height: 250px; margin: 0 auto 30px;
+    background: #f9f9f9; border-radius: 20px; display: flex;
+    align-items: center; justify-content: center; border: 3px solid var(--disney-blue);
+}
+#game-img { max-width: 90%; max-height: 90%; object-fit: contain; }
+
+.options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px; }
+.btn-opt {
+    padding: 12px; border: 2px solid #eee; background: #fff; cursor: pointer;
+    border-radius: 12px; font-weight: 600; transition: 0.2s;
+}
+.btn-opt:hover:not(:disabled) { background: var(--disney-blue); color: white; }
+
+.correct-btn { background: var(--success) !important; color: white !important; border-color: var(--success) !important; }
+.wrong-btn { background: var(--error) !important; color: white !important; border-color: var(--error) !important; }
+
+.btn-primary {
+    background: var(--gold); color: var(--disney-dark); padding: 12px 30px;
+    border: none; border-radius: 25px; font-weight: 800; cursor: pointer;
 }
 
-.btn-categoria {
-    padding: 12px 20px;
-    border: 3px solid #000;
-    background: #efff00;
-    font-weight: bold;
-    cursor: pointer;
-    border-radius: 10px;
-    transition: 0.2s;
+.search-box { margin-bottom: 20px; }
+
+/* Cards con badge de películas */
+.card { position: relative; cursor: pointer; }
+.badge {
+    position: absolute; top: 10px; right: 10px; background: var(--disney-blue);
+    color: white; padding: 4px 10px; border-radius: 10px; font-size: 0.7rem;
 }
 
-.btn-categoria:hover {
-    background: white;
-    transform: translateY(-3px);
+/* Modal */
+.modal {
+    display: none; position: fixed; z-index: 200; left: 0; top: 0;
+    width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px);
+}
+.modal-content {
+    background: white; margin: 5% auto; padding: 30px; border-radius: 20px;
+    width: 90%; max-width: 500px; position: relative; text-align: center;
+}
+.close { position: absolute; right: 20px; top: 10px; font-size: 28px; cursor: pointer; }
+
+/* Explorador de Medios */
+.stats-layout { display: grid; gap: 20px; }
+.stat-item {
+    background: white; padding: 20px; border-radius: 15px;
+    display: flex; align-items: center; gap: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+.stat-info h4 { color: var(--disney-blue); margin-bottom: 5px; }
+.stat-count { background: var(--gold); padding: 2px 8px; border-radius: 5px; font-weight: bold; }
+/* ... (Todo lo anterior) ... */
+
+.score-board {
+    background: var(--disney-dark); color: var(--gold);
+    padding: 10px; border-radius: 10px; margin-bottom: 20px;
+    font-weight: bold; font-size: 0.9rem;
 }
 
-#contenedorPersonajes {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px;
-    padding: 40px;
+.fav-btn {
+    position: absolute; top: 10px; left: 10px;
+    background: rgba(255,255,255,0.8); border: none;
+    border-radius: 50%; width: 30px; height: 30px;
+    cursor: pointer; transition: 0.3s; z-index: 5;
 }
 
-.tarjeta {
-    background: white;
-    border: 3px solid #000;
-    border-radius: 15px;
-    padding: 15px;
-    box-shadow: 8px 8px 0px #3c5baf;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
+.fav-btn.active { color: #e74c3c; transform: scale(1.2); }
 
-.tarjeta img {
-    width: 100%;
-    height: 200px;
-    object-fit: contain;
-    background: #f0f0f0;
-    border-radius: 10px;
-}
-
-.nombre {
-    margin-top: 15px;
-    font-size: 1.3rem;
-    font-weight: bold;
-    color: #3c5baf;
-}
-
-.ocupacion {
-    font-size: 0.9rem;
-    color: #666;
-    margin-top: 5px;
-}
-
-.frase {
-    font-style: italic;
-    font-size: 0.85rem;
-    margin-top: 10px;
-    color: #444;
-}
-
-.ciudad {
-    font-weight: bold;
-    font-size: 0.75rem;
-    color: #3c5baf;
-    margin-top: 5px;
-    text-transform: uppercase;
-}
-
-.tarjeta:hover {
-    transform: rotate(1deg) scale(1.02);
-    border-color: #3c5baf;
-}
-
-.imagen-contenedor {
-    width: 100%;
-    height: 180px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-    background: #f0f0f0;
-    border-radius: 10px;
-    margin-bottom: 10px;
-}
-
-.tarjeta img {
-    max-height: 100%;
-    max-width: 100%;
-    object-fit: contain; /* Esto evita que se deformen */
-}
+.modal-content img { border: 5px solid var(--gold); }

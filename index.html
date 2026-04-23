@@ -3,25 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Springfield Wiki</title>
+    <title>Disney Elite Explorer</title>
     <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
 </head>
 <body>
+    <nav class="navbar">
+        <div class="logo">DISNEY<span>ELITE</span></div>
+        <div class="nav-links">
+            <button onclick="showSection('characters')" id="nav-char" class="active">Biblioteca</button>
+            <button onclick="showSection('stats')" id="nav-stats">Ranking</button>
+            <button onclick="showSection('game')" id="nav-game">Quiz</button>
+        </div>
+    </nav>
 
-    <header>
-        <h1>Habitantes de Springfield</h1>
-        <div class="controles">
-            <button class="btn-categoria" onclick="cargarCategoria('protagonistas')">Protagonistas</button>
-            <button class="btn-categoria" onclick="cargarCategoria('iconicos')">Icónicos</button>
-            <button class="btn-categoria" onclick="cargarCategoria('secundarios')">Secundarios</button>
-            <button class="btn-categoria" onclick="cargarLugares()">📍 Lugares</button>
-</div>
-        <p id="estadoMensaje">Elige una categoría para explorar</p>
-    </header>
+    <main>
+        <section id="characters" class="content-section">
+            <div class="header">
+                <h1>Tu Colección Disney</h1>
+                <input type="text" id="search" placeholder="Busca personajes..." onkeyup="filterCharacters()">
+            </div>
+            <div id="char-grid" class="grid"></div>
+        </section>
 
-    <main id="contenedorPersonajes">
-        </main>
+        <section id="stats" class="content-section" style="display:none;">
+            <div class="header">
+                <h1>Personajes más Populares</h1>
+                <p>Basado en apariciones en películas oficiales.</p>
+            </div>
+            <div id="stats-container" class="stats-layout"></div>
+        </section>
 
-    <script src="script.js"></script>
+        <section id="game" class="content-section" style="display:none;">
+            <div class="game-card">
+                <div class="score-board">Puntos: <span id="current-score">0</span> | Récord: <span id="high-score">0</span></div>
+                <h2 id="feedback">¿Quién es?</h2>
+                <div class="img-container"><img id="game-img" src="" alt=""></div>
+                <div id="options" class="options-grid"></div>
+                <button class="btn-primary" onclick="setupGame()">Siguiente</button>
+            </div>
+        </section>
+    </main>
+
+    <div id="char-modal" class="modal" onclick="closeModal()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <div id="modal-body"></div>
+        </div>
+    </div>
+
+    <script src="main.js"></script>
 </body>
 </html>
